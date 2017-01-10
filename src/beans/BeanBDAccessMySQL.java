@@ -58,7 +58,7 @@ public class BeanBDAccessMySQL extends DataBaseAccessAbstract {
         }
     }
 
-    public String findPasswpordByLoginHashCode(String user) 
+    public String findPasswpordByLogin(String user) 
     {
         synchronized(this)
         {
@@ -66,7 +66,7 @@ public class BeanBDAccessMySQL extends DataBaseAccessAbstract {
             PreparedStatement p;
             System.out.println("Recherche dans la BD....");
             try {
-                p = myConnection.prepareStatement("select pwd from users where login=? ");
+                p = myConnection.prepareStatement("select password from users where login=? ");
                 p.setString(1, user);
                 ResultSet rs = p.executeQuery();
                 int cpt = 0;

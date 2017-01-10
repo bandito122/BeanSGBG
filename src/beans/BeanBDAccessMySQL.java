@@ -278,6 +278,28 @@ public class BeanBDAccessMySQL extends DataBaseAccessAbstract {
         catch (Exception ex) { System.err.println("Erreur ! [" + ex + "]"); }
          return false;
     }
+    public boolean UpdateAppareilEtatBG(int etat,int numSerie) throws SQLException
+    {
+        PreparedStatement p  ;
+        Vector v = new Vector();
+        
+         try{
+             p = myConnection.prepareStatement(" update APPAREILS set etatpaiement=? where numSerie = ? and etatpaiement=1");
+             p.setInt(1, etat);
+             p.setInt(2, numSerie);
+             int test = p.executeUpdate();
+             if (test ==1)
+             {
+                 return true;
+             }
+             else
+                 return false;
+  
+        }
+        catch (SQLException ex) { System.err.println("Erreur SQL ! [" + ex + "]"); }
+        catch (Exception ex) { System.err.println("Erreur ! [" + ex + "]"); }
+         return false;
+    }
     public float findFinalPriceBySerialNum(int NumSerie)
     {
         float s = 0 ;
@@ -325,6 +347,7 @@ public class BeanBDAccessMySQL extends DataBaseAccessAbstract {
         catch (Exception ex) { System.err.println("Erreur ! [" + ex + "]"); }
          return bool;
     }
+  
     public int FindIdClientByName(String NomClient) throws SQLException
     {
         System.out.println("NOm client= " + NomClient);
@@ -389,7 +412,7 @@ public class BeanBDAccessMySQL extends DataBaseAccessAbstract {
             return null;
         }
     }
-    public boolean traiteRequeteInsertFacture(int numSerie,float Prix,int idClient,int etatPaiement) throws SQLException
+    public boolean traiteRequeteInsertFacture(int numSerie,float Prix,int idClient,int etatPaiement,String modeDePaiement) throws SQLException
     {
         System.out.println("NUM SERIE = " + numSerie);
         System.out.println("PRIX = " + Prix);
@@ -399,11 +422,12 @@ public class BeanBDAccessMySQL extends DataBaseAccessAbstract {
         Vector v = new Vector();
         boolean bool=false;
          try{
-             p = myConnection.prepareStatement(" insert into FACTURES values(null,?,?,?,?)");
+             p = myConnection.prepareStatement(" insert into FACTURES values(null,?,?,?,?,?)");
              p.setInt(1, numSerie);
              p.setFloat(2,Prix);
              p.setInt(3, idClient);
              p.setInt(4, etatPaiement);
+             p.setString(5, modeDePaiement);
              p.executeUpdate();
              test=1;
              bool=true;
